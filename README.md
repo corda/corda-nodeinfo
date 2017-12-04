@@ -1,0 +1,1 @@
+./gradlew clean build getInfo -Phost="localhost:10003" -Pusername="corda" -Ppassword="corda_initial_password"
