@@ -26,6 +26,7 @@ fun main(args: Array<String>) {
     val username = args.get(1)
     val password = args.get(2)
 
+
     println("Logging into $host as $username")
 
     val proxy = loginToCordaNode(host, username, password)
@@ -47,6 +48,14 @@ fun main(args: Array<String>) {
     proxy.notaryIdentities().map {
         println("-- ${it.name}")
     }
+
+    if (args.getOrNull(3) == "extended")
+    {
+        println("Platform version: ${proxy.nodeInfo().platformVersion}")
+        println(proxy.currentNodeTime())
+    }
+
+
 }
 
 fun loginToCordaNode(host: String, username: String, password: String): CordaRPCOps {
