@@ -19,13 +19,19 @@ import org.apache.activemq.artemis.core.remoting.impl.netty.TransportConstants.H
  * Usage: <Program> host:port user password
  */
 fun main(args: Array<String>) {
-    if (args.size < 3) {
+    if (args.size < 2) {
         throw RuntimeException("Usage: <Program> host:port username password (or via ./gradlew getInfo host:port username password)")
     }
     val host = args.get(0)
     val username = args.get(1)
-    val password = args.get(2)
 
+    val password =
+            if (args.size > 2) {
+                args.get(2)
+            } else {
+                print("Password:")
+                System.console().readPassword().joinToString(separator = "")
+            }
 
     println("Logging into $host as $username")
 
@@ -49,13 +55,10 @@ fun main(args: Array<String>) {
         println("-- ${it.name}")
     }
 
-    if (args.getOrNull(3) == "extended")
-    {
+    if (args.getOrNull(3) == "extended") {
         println("Platform version: ${proxy.nodeInfo().platformVersion}")
         println(proxy.currentNodeTime())
     }
-
-
 }
 
 fun loginToCordaNode(host: String, username: String, password: String): CordaRPCOps {
@@ -67,8 +70,7 @@ fun loginToCordaNode(host: String, username: String, password: String): CordaRPC
 /**
  * Try and connect directly to the queues
  */
-fun amqp(host: String)
-{
+fun amqp(host: String) {
     val connectionParams = HashMap<String, Any>()
     val port = host.split(":").get(1)
     val hostname = host.split(":").get(0)
